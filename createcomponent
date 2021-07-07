@@ -1,0 +1,24 @@
+#!/usr/bin/php
+<?php
+	if($argc < 2) die("\n** Se necesita un nombre para crear el componente **\n\n");
+	if($argc > 2) echo "\n** Se requiere solo 1 argumento para el sript, demas seran ignorados **\n\n";
+
+	$filename = $argv[1];
+	$component_name = ucfirst($argv[1]);
+	echo "** Creando carpeta {$filename}";
+	if(!mkdir($filename)) {
+		die("Fallo al crear carpeta {$filename}");
+	}
+
+	$css = "@import 'root/variables.scss';";
+
+	$json = "{\n\"main\": \"{$filename}.jsx\"\n}";
+
+	$component_base = "import React from 'react';\nimport style from './{$filename}.scss';\n\nconst {$component_name} = () => (<div></div>);\n\nexport default {$component_name};";
+
+	echo "\n** Escribiendo archivos";
+	file_put_contents("{$filename}/package.json", $json);
+	file_put_contents("{$filename}/{$filename}.jsx", $component_base);
+	file_put_contents("{$filename}/{$filename}.scss", $css);
+	echo "\n** Componente creado con exito!\n";
+?>
